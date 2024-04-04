@@ -6,10 +6,15 @@ public class PlayerController : MonoBehaviour
 {
     private float _horizontalInput, _currentVelocity = 0, _currentRotation = 0, _currentJump = 0, _jumpBuffer = 0;
     private bool _jumpPressed = false, _isStopped = false, _isJumping = false;
-    private const float _maxVelocity = 30f, _jumpForce = 25f, _jumpTime = .7f, _gravityForce = .35f, _antiGravityForce = 12.5f, _jumpBufferTime = .1f,
+    private const float _maxVelocity = 35f, _jumpForce = 25f, _ringForce = 10f, _jumpTime = .7f, _gravityForce = .35f, _antiGravityForce = 8f, _jumpBufferTime = .1f,
             _angleThreshhold = 140f;
-    private const float _rotationAngle = -6f;
+    private const float _rotationAngle = -5f;
     [SerializeField] private Rigidbody2D _playerRB;
+
+    public void CollectRing()
+    {
+        _currentJump += _ringForce;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +54,7 @@ public class PlayerController : MonoBehaviour
                 _isJumping = false;
         }
     }
+
 
     private void UpdateForces()
     {
