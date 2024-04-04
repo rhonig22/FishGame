@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float _horizontalInput, _currentVelocity = 0, _currentRotation = 0, _currentJump = 0;
+    private float _horizontalInput, _currentVelocity = 0, _currentRotation = 0, _currentJump = 0, _jumpBuffer = 0;
     private bool _jumpPressed = false, _isStopped = false, _isJumping = false;
-    private const float _maxVelocity = 30f, _jumpForce = 5f, _jumpTime = .5f, _gravityForce = .4f, _antiGravityForce = .15f;
+    private const float _maxVelocity = 30f, _jumpForce = 25f, _jumpTime = .7f, _gravityForce = .35f, _antiGravityForce = 12.5f, _jumpBufferTime = .1f,
+            _angleThreshhold = 140f;
     private const float _rotationAngle = -6f;
     [SerializeField] private Rigidbody2D _playerRB;
 
@@ -29,7 +30,7 @@ public class PlayerController : MonoBehaviour
     {
         Rotate(_horizontalInput * _rotationAngle);
 
-        if (_jumpPressed)
+        if (_jumpPressed || (!_isJumping && _jumpBuffer > 0))
         {
             Jump();
             _jumpPressed = false;
@@ -38,7 +39,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateJump()
     {
-        if (_isJumping)
+        _jumpBuffer -= Time.deltaTime;
+        if (_currentJump > 0)
         {
             _currentJump -= _jumpForce / _jumpTime * Time.deltaTime;
 
@@ -52,13 +54,9 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isStopped)
         {
-            if (_currentRotation >= 0 && _currentRotation <= 90)
+            if (_currentRotation >= 0 && _currentRotation <= 180)
             {
-                _currentVelocity -= _currentRotation / 90 * _antiGravityForce;
-            }
-            else if (_currentRotation > 90 && _currentRotation <= 180)
-            {
-                _currentVelocity -= (180 - _currentRotation) / 90 * _antiGravityForce;
+                _currentVelocity -= _antiGravityForce * Time.deltaTime;
             }
             else if (_currentRotation > 180 && _currentRotation <= 270)
             {
@@ -71,7 +69,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _currentVelocity = Mathf.Clamp(_currentVelocity, 0f, _maxVelocity);
-        _playerRB.velocity = transform.up * _currentVelocity + Vector3.up * _currentJump;
+        _playerRB.velocity = transform.up * ( _currentVelocity + _currentJump );
     }
 
     private void Rotate(float angle)
@@ -86,7 +84,10 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         if (_isJumping)
+        {
+            _jumpBuffer = _jumpBufferTime;
             return;
+        }
 
         _currentJump = _jumpForce;
         _isJumping = true;
@@ -94,13 +95,23 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        _currentVelocity = 0;
-        _isStopped = true;
+        if (collision.collider.CompareTag("Wall"))
+        {
+            var normal = collision.GetContact(0).normal;
+            var angle = Vector2.Angle(transform.up, normal);
+            if (angle > _angleThreshhold)
+            {
+                _currentVelocity = 0;
+                _isStopped = true;
+            }
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        _currentVelocity = 0;
-        _isStopped = false;
+        if (collision.collider.CompareTag("Wall"))
+        {
+            _isStopped = false;
+        }
     }
 }
