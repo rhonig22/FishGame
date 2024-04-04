@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Water
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -39,6 +40,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3209513131
+    locked: 0
+  - name: Midground
+    uniqueID: 1490865035
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Forground
+    uniqueID: 1567306819
     locked: 0
