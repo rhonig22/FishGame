@@ -6,10 +6,15 @@ using UnityEngine;
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance;
-    private PlayerData _playerData = new PlayerData();
+    private PlayerData _playerData;
     public float TimePassed { get; private set; } = 0f;
+    public int CurrentLevel { get; private set; } = 0;
     public bool IsTimeStarted { get; private set; } = false;
     public bool ShouldPauseAtStart { get; private set; } = true;
+    private LevelData _currentLevelData;
+    private float _currentScoreDecrement = 0;
+    private readonly float _scoreDecrement = .05f;
+    private readonly int _coinScore = 100;
     private string _userName;
     private string _userId;
 
@@ -23,7 +28,12 @@ public class DataManager : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    private void Start()
+    {
         ResetData();
+        SetLevel(1);
     }
 
     private void Update()
@@ -31,6 +41,12 @@ public class DataManager : MonoBehaviour
         if (IsTimeStarted)
         {
             TimePassed += Time.deltaTime;
+            _currentScoreDecrement += Time.deltaTime;
+            if (_currentScoreDecrement > _scoreDecrement)
+            {
+                _currentLevelData.TimeBonus--;
+                _currentScoreDecrement -= _scoreDecrement;
+            }
         }
     }
     public void StartTimer()
@@ -40,33 +56,54 @@ public class DataManager : MonoBehaviour
     public void PauseTimer()
     {
         IsTimeStarted = false;
-        SetTime(TimePassed);
     }
 
     public void ResetData()
     {
-        _playerData = new PlayerData();
+        _playerData = new PlayerData(GameManager.Instance.MaxLevels);
         TimePassed = 0f;
     }
 
-    public void SetTime(float time)
+    public void SetLevel(int level)
     {
-        _playerData.TimePassed = time;
+        CurrentLevel = level - 1;
+        _currentLevelData = _playerData.Levels[CurrentLevel];
     }
 
-    public float GetTimeValue()
+    public void AddCoin()
     {
-        return _playerData.TimePassed;
+        _currentLevelData.Coins++;
     }
 
-    public string GetTime()
+    public LevelData GetCurrentLevelData()
     {
-        return TimeSpan.FromSeconds((double)_playerData.TimePassed).ToString(@"mm\:ss");
+        return GetLevelData(CurrentLevel);
+    }
+
+    public void ResetCurrentLevel()
+    {
+        _playerData.Levels[CurrentLevel] = new LevelData();
+        _currentLevelData = _playerData.Levels[CurrentLevel];
+    }
+
+    public LevelData GetLevelData(int level)
+    {
+        return _playerData.Levels[level];
     }
 
     public void SetName(string name)
     {
         _userName = name;
+    }
+
+    public void CalculateScore()
+    {
+        _currentLevelData.Score = _currentLevelData.Coins * _coinScore + _currentLevelData.TimeBonus;
+        _playerData.CurrentHighScore = 0;
+        for (int i = 0; i < _playerData.Levels.Length; i++)
+        {
+            _playerData.CurrentHighScore += _playerData.Levels[i].Score;
+        }
     }
 
     public string GetName() { return _userName; }

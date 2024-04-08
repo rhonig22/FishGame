@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,31 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData
 {
-    public int CurrentHighScore;
-    public float TimePassed;
+    public float CurrentHighScore;
+    public LevelData[] Levels;
 
-    public PlayerData()
+    public PlayerData(int levelCount)
     {
-        TimePassed = 0;
+        CurrentHighScore = 0;
+        Levels = new LevelData[levelCount];
+        for (int i = 0; i < Levels.Length; i++)
+        {
+            Levels[i] = new LevelData();
+        }
+    }
+}
+
+[System.Serializable]
+public class LevelData
+{
+    public float Score;
+    public float TimeBonus;
+    public int Coins;
+
+    public LevelData()
+    {
+        Score = 0;
+        Coins = 0;
+        TimeBonus = 10000;
     }
 }
