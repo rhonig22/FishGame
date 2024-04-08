@@ -8,20 +8,37 @@ public class LevelUXManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI _coinCount;
     [SerializeField] TextMeshProUGUI _bonusScore;
+    [SerializeField] AudioClip _waitSound;
+    [SerializeField] AudioClip _goSound;
     private LevelData _levelData;
     private bool _isLevelStarted = false;
-    private readonly float _startTime = 3f;
+    private const float _waitTime = .5f;
+    private const int _numWaits = 3;
+    private int _waitCount = 0;
 
 
     private void Start()
     {
-        StartCoroutine(StartLevel());
+        StartCoroutine(WaitSound());
         TimeManager.Instance.Pause(true);
+    }
+
+    private IEnumerator WaitSound()
+    {
+        yield return new WaitForSecondsRealtime(_waitTime);
+        SoundManager.Instance.PlaySound(_waitSound, transform.position);
+        _waitCount++;
+        if (_waitCount >= _numWaits)
+            StartCoroutine(StartLevel());
+        else
+            StartCoroutine(WaitSound());
+
     }
 
     private IEnumerator StartLevel()
     {
-        yield return new WaitForSecondsRealtime(_startTime);
+        yield return new WaitForSecondsRealtime(_waitTime);
+        SoundManager.Instance.PlaySound(_goSound, transform.position);
         _isLevelStarted = true;
         TimeManager.Instance.Pause(false);
         DataManager.Instance.StartTimer();

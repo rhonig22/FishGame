@@ -31,6 +31,6 @@ public class LevelData
     {
         Score = 0;
         Coins = 0;
-        TimeBonus = 10000;
+        TimeBonus = 2000;
     }
 }

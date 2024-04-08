@@ -289,8 +289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817cccd6620aa054fbb0c4e128bcf766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialAbility1: 1
-  _initialAbility2: 0
 --- !u!1 &4303629285890016450
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,13 +543,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7bf352c57968f3848bbb531b492201b6, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 150
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
