@@ -10,6 +10,7 @@ public class LevelUXManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _bonusScore;
     [SerializeField] AudioClip _waitSound;
     [SerializeField] AudioClip _goSound;
+    [SerializeField] ControlsUXManager _controls;
     private LevelData _levelData;
     private bool _isLevelStarted = false;
     private const float _waitTime = .5f;
@@ -19,8 +20,21 @@ public class LevelUXManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(WaitSound());
         TimeManager.Instance.Pause(true);
+        if (DataManager.Instance.ShouldPauseAtStart && _controls != null)
+        {
+            _controls.gameObject.SetActive(true);
+            _controls._controlsFinished.AddListener(() => { _controls.gameObject.SetActive(false); StartTimer(); });
+        }
+        else
+        {
+            StartTimer();
+        }
+    }
+
+    private void StartTimer()
+    {
+        StartCoroutine(WaitSound());
     }
 
     private IEnumerator WaitSound()

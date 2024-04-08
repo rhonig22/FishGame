@@ -113,6 +113,8 @@ MonoBehaviour:
   _playerRB: {fileID: 860092272156760201}
   _jumpSound: {fileID: 8300000, guid: 04227b0d9d6fbff46a4c594a92f9d124, type: 3}
   _wallSound: {fileID: 8300000, guid: 6ab1a3ea67e3d994883d30395d9cfc88, type: 3}
+  _ringPrefab: {fileID: 8948557446962132508, guid: 0c293b051369cde46b3d334c9b1c1f65, type: 3}
+  _devMode: 0
   triggerScreenShake:
     m_PersistentCalls:
       m_Calls: []
