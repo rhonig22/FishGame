@@ -15,6 +15,7 @@ public class PlayerRingPickups : MonoBehaviour
     {
         if (collision.CompareTag("Ring"))
         {
+            DataManager.Instance.AddCoin();
             _player.CollectRing();
             collision.gameObject.GetComponent<RingController>().Collect();
         }

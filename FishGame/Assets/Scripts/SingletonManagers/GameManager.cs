@@ -7,9 +7,10 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public readonly int MaxLevels = 1;
     private readonly string _roomName = "Level_{0}";
     private readonly string _leaderboardSceneName = "Leaderboard";
-    private readonly int _maxLevels = 1;
+    private readonly string _transitionSceneName = "Transition";
     private int _currentRoomId = 1;
     private UnityEvent _sceneTransition = new UnityEvent();
 
@@ -36,14 +37,8 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.PauseTimer();
         DataManager.Instance.ResetData();
         _currentRoomId = 1;
-        LoadNextBoss();
-    }
-
-    public void LevelFinished()
-    {
-        DataManager.Instance.PauseTimer();
-        _currentRoomId++;
-        LoadNextBoss();
+        DataManager.Instance.SetLevel(_currentRoomId);
+        LoadNextLevel();
     }
 
     public void EndGame()
@@ -57,10 +52,33 @@ public class GameManager : MonoBehaviour
         StartCoroutine(WaitAndTransition(loadEndScene, 0f));
     }
 
-    public void LoadNextBoss()
+    public void LoadTransition()
     {
-        UnityAction loadNextBoss = () => { SceneManager.LoadScene(_roomName.Replace("{0}", _currentRoomId + "")); };
-        StartCoroutine(WaitAndTransition(loadNextBoss, 0f));
+        UnityAction loadTransition = () => { SceneManager.LoadScene(_transitionSceneName); };
+        StartCoroutine(WaitAndTransition(loadTransition, 0f));
+    }
+
+    public void ReplayLevel()
+    {
+        DataManager.Instance.ResetCurrentLevel();
+        UnityAction loadNext = () => { SceneManager.LoadScene(_roomName.Replace("{0}", _currentRoomId + "")); };
+        StartCoroutine(WaitAndTransition(loadNext, 0f));
+    }
+
+    public void LoadNextLevel()
+    {
+        IncreaseLevel();
+        UnityAction loadNext = () => { SceneManager.LoadScene(_roomName.Replace("{0}", _currentRoomId + "")); };
+        StartCoroutine(WaitAndTransition(loadNext, 0f));
+    }
+
+    private void IncreaseLevel()
+    {
+        if (_currentRoomId < MaxLevels)
+        {
+            _currentRoomId++;
+            DataManager.Instance.SetLevel(_currentRoomId);
+        }
     }
 
     private IEnumerator WaitAndTransition(UnityAction action, float transitionTime)
