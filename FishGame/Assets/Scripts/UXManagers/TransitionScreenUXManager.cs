@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class TransitionScreenUXManager : MonoBehaviour
 {
     [SerializeField] Button NextLevelButton;
+    [SerializeField] GameObject ViewLeaderboardButton;
+    [SerializeField] GameObject _endText;
     [SerializeField] TextMeshProUGUI _coinScore;
     [SerializeField] TextMeshProUGUI _bonusScore;
     [SerializeField] TextMeshProUGUI _levelScore;
@@ -18,9 +20,18 @@ public class TransitionScreenUXManager : MonoBehaviour
     private readonly float _waitTime = .5f;
     private readonly int _coinMultiplier = 100;
     private string _name;
+    private bool _isEndScreen = false;
 
     private void Start()
     {
+        if (DataManager.Instance.CurrentLevel + 1 == GameManager.Instance.MaxLevels)
+        {
+            _isEndScreen = true;
+            NextLevelButton.gameObject.SetActive(false);
+            ViewLeaderboardButton.SetActive(true);
+            _endText.SetActive(true);
+        }
+
         NextLevelButton.Select();
         _name = DataManager.Instance.GetName();
         if (_name == string.Empty)
@@ -38,6 +49,11 @@ public class TransitionScreenUXManager : MonoBehaviour
     public void NextLevel()
     {
         GameManager.Instance.LoadNextLevel();
+    }
+
+    public void ViewLeaderboard()
+    {
+        GameManager.Instance.LoadLeaderboard();
     }
 
     public void ReplayLevel()

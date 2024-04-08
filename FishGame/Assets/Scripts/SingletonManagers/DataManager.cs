@@ -50,6 +50,7 @@ public class DataManager : MonoBehaviour
             }
         }
     }
+
     public void StartTimer()
     {
         IsTimeStarted = true;
@@ -112,6 +113,12 @@ public class DataManager : MonoBehaviour
     public float GetScore()
     {
         return _playerData.CurrentHighScore;
+    }
+
+    public void DecreaseBonus(int points)
+    {
+        _currentLevelData.TimeBonus -= points;
+        _currentLevelData.TimeBonus = Mathf.Clamp(_currentLevelData.TimeBonus, 0, _currentLevelData.TimeBonus);
     }
 
     public void SetId(string id)
