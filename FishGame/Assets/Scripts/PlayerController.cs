@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
             _angleThreshhold = 140f, _finishZoom = 12f, _slowFactor = .05f, _slowTime = 2f, _transitionTime = 1f;
     private const float _rotationAngle = -5f;
     [SerializeField] private Rigidbody2D _playerRB;
+    [SerializeField] private AudioClip _jumpSound;
+    [SerializeField] private AudioClip _wallSound;
     public UnityEvent triggerScreenShake = new UnityEvent();
     public UnityEvent<float> triggerFinish = new UnityEvent<float>();
 
@@ -108,6 +110,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        SoundManager.Instance.PlaySound(_jumpSound, transform.position);
         _currentJump = _jumpForce;
         _isJumping = true;
     }
@@ -116,6 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.collider.CompareTag("Wall"))
         {
+            SoundManager.Instance.PlaySound(_wallSound, transform.position);
             var normal = collision.GetContact(0).normal;
             var angle = Vector2.Angle(transform.up, normal);
             if (angle > _angleThreshhold)

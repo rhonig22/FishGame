@@ -45,6 +45,7 @@ public class DataManager : MonoBehaviour
             if (_currentScoreDecrement > _scoreDecrement)
             {
                 _currentLevelData.TimeBonus--;
+                _currentLevelData.TimeBonus = Mathf.Clamp(_currentLevelData.TimeBonus, 0, _currentLevelData.TimeBonus);
                 _currentScoreDecrement -= _scoreDecrement;
             }
         }
@@ -96,6 +97,8 @@ public class DataManager : MonoBehaviour
         _userName = name;
     }
 
+    public string GetName() { return _userName; }
+
     public void CalculateScore()
     {
         _currentLevelData.Score = _currentLevelData.Coins * _coinScore + _currentLevelData.TimeBonus;
@@ -106,7 +109,10 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public string GetName() { return _userName; }
+    public float GetScore()
+    {
+        return _playerData.CurrentHighScore;
+    }
 
     public void SetId(string id)
     {

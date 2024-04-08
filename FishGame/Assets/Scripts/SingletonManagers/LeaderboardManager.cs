@@ -10,7 +10,7 @@ public class LeaderboardManager : MonoBehaviour
     public static LeaderboardManager Instance { get; private set; }
     public static bool dataRetrieved { get; private set; } = false;
     public static UnityEvent userDataRetrieved = new UnityEvent();
-    private readonly string leaderboardID = "vermin_leaderboard";
+    private readonly string leaderboardID = "fishgame_leaderboard";
 
     // Start is called before the first frame update
     void Start()

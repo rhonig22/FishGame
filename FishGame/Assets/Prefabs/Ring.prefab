@@ -138,6 +138,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 6139206847992541356}
   _particles: {fileID: 4573900042833982481}
+  _collider: {fileID: 5861112455528520154}
+  _coinSound: {fileID: 8300000, guid: 028b02b9e43b556488a93279364e6eb4, type: 3}
 --- !u!95 &6139206847992541356
 Animator:
   serializedVersion: 5

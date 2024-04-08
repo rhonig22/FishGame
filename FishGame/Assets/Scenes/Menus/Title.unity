@@ -970,6 +970,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1924080081207148991, guid: c2d1618cdd1434c4e8bf226b166d5902, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 4d8eab94d6673dd40a914a78e26d8591, type: 3}
     - target: {fileID: 6048809876903481740, guid: c2d1618cdd1434c4e8bf226b166d5902, type: 3}
       propertyPath: m_Name
       value: GameManager
