@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public readonly int MaxLevels = 2;
+    public readonly int MaxLevels = 3;
     private readonly string _roomName = "Level_{0}";
     private readonly string _leaderboardSceneName = "Leaderboard";
     private readonly string _transitionSceneName = "Transition";
