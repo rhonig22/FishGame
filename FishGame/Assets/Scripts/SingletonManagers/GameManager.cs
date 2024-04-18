@@ -26,6 +26,14 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Update()
+    {
+        if (Input.GetButtonDown("Restart"))
+        {
+            ReplayLevel();
+        }
+    }
+
     // called second
     private void OnLevelWasLoaded(int level)
     {
